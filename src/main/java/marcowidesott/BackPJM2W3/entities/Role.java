@@ -1,7 +1,6 @@
 package marcowidesott.BackPJM2W3.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +16,11 @@ public class Role {
 
     @Enumerated(EnumType.STRING)
     private RoleType name;
+
+    public Role(Long id, RoleType name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public enum RoleType {
         USER,
