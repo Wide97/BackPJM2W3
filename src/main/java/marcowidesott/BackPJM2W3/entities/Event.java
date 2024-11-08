@@ -25,5 +25,6 @@ public class Event {
     private int maxParticipants;
 
     @ManyToOne
+    @JoinColumn(name = "organizer_id", referencedColumnName = "id")
     private User organizer;
 }
