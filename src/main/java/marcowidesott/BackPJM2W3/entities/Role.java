@@ -1,29 +1,25 @@
 package marcowidesott.BackPJM2W3.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
+@Table(name = "roles")
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Role {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private RoleType name;
+    @Column(nullable = false, unique = true)
+    private String roleName;
 
-    public Role(Long id, RoleType name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public enum RoleType {
-        USER,
-        ORGANIZER
+    public Role(String roleName) {
+        this.roleName = roleName;
     }
 }

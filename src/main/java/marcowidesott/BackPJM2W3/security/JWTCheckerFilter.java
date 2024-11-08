@@ -24,23 +24,24 @@ public class JWTCheckerFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        // 1. Legge l'header Authorization dalla richiesta
-        String authHeader = request.getHeader("Authorization");
-
-        // 2. Controlla che l'header sia presente e che inizi con "Bearer "
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response); // passa al prossimo filtro se l'header non è valido
+        // Non applicare il filtro agli endpoint pubblici
+        String path = request.getRequestURI();
+        if (path.startsWith("/auth/register") || path.startsWith("/auth/login")) {
+            filterChain.doFilter(request, response);
             return;
         }
 
-        // 3. Estrae il token dall'header
-        String accessToken = authHeader.substring(7); // rimuove "Bearer " per ottenere il token
+        String authHeader = request.getHeader("Authorization");
 
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        String accessToken = authHeader.substring(7);
         try {
-            // 4. Verifica la validità del token
             String username = jwt.validateToken(accessToken);
 
-            // 5. Se il token è valido, imposta l'autenticazione nel SecurityContext
             if (username != null) {
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(username, null, List.of());
@@ -52,8 +53,8 @@ public class JWTCheckerFilter extends OncePerRequestFilter {
             return;
         }
 
-        // 6. Procede al prossimo filtro nella catena
         filterChain.doFilter(request, response);
     }
 }
+
 

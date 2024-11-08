@@ -1,6 +1,7 @@
 package marcowidesott.BackPJM2W3.controllers;
 
 import jakarta.validation.Valid;
+import marcowidesott.BackPJM2W3.entities.User;
 import marcowidesott.BackPJM2W3.payloads.NewUserDTO;
 import marcowidesott.BackPJM2W3.payloads.UserLoginDTO;
 import marcowidesott.BackPJM2W3.services.AuthService;
@@ -19,8 +20,9 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody NewUserDTO newUserDTO) {
-        return ResponseEntity.ok(authService.register(newUserDTO));
+    public ResponseEntity<User> register(@Valid @RequestBody NewUserDTO newUserDTO) {
+        User newUser = authService.register(newUserDTO);
+        return ResponseEntity.ok(newUser);
     }
 
     @PostMapping("/login")
